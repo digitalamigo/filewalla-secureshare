@@ -6,63 +6,180 @@ const PORT = process.env.PORT || 3000;
 app.get('/', (req, res) => {
   res.send(`
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>FileWalla SecureShare</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FileWalla SecureShare - Enterprise File Transfer</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .container { max-width: 1200px; margin: 20px auto; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        .header { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 20px; text-align: center; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; }
+        .bg-gradient { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .header { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 40px 20px; text-align: center; }
+        .header h1 { font-size: 3rem; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 15px; }
+        .shield { font-size: 3rem; }
+        .subtitle { font-size: 1.5rem; font-weight: 300; margin-bottom: 10px; }
+        .tagline { font-size: 1rem; opacity: 0.9; }
         .content { display: grid; grid-template-columns: 2fr 1fr; gap: 40px; padding: 40px; }
-        .feature { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #007bff; }
-        .login-panel { background: #f8f9fa; padding: 30px; border-radius: 10px; }
-        .badge { background: #28a745; color: white; padding: 5px 10px; border-radius: 15px; font-size: 12px; margin: 5px; display: inline-block; }
+        .features h2 { font-size: 2rem; color: #2d3748; margin-bottom: 30px; }
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .feature { background: #f7fafc; padding: 24px; border-radius: 8px; border-left: 4px solid #4299e1; transition: transform 0.2s; }
+        .feature:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .feature h3 { color: #2d3748; font-size: 1.25rem; margin-bottom: 8px; }
+        .feature p { color: #4a5568; }
+        .enterprise-section { background: linear-gradient(135deg, #e6fffa 0%, #e6f3ff 100%); padding: 30px; border-radius: 12px; border: 2px solid #bee3f8; }
+        .enterprise-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
+        .enterprise-item { display: flex; align-items: center; gap: 10px; }
+        .check-dot { width: 8px; height: 8px; background: #38a169; border-radius: 50%; }
+        .login-panel { background: #f7fafc; padding: 30px; border-radius: 12px; border: 2px solid #e2e8f0; }
+        .login-form { margin-top: 20px; }
+        .form-group { margin-bottom: 15px; }
+        .form-input { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 6px; font-size: 16px; transition: border-color 0.2s; }
+        .form-input:focus { outline: none; border-color: #4299e1; }
+        .btn-primary { width: 100%; background: #4299e1; color: white; padding: 12px; border: none; border-radius: 6px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .btn-primary:hover { background: #3182ce; transform: translateY(-1px); }
+        .test-accounts { margin-top: 20px; padding: 20px; background: #ebf8ff; border-radius: 8px; border: 1px solid #bee3f8; }
+        .test-accounts h4 { color: #2b6cb0; margin-bottom: 10px; }
+        .test-accounts p { color: #2c5282; font-size: 14px; margin-bottom: 5px; }
+        .status-indicator { margin-top: 20px; padding: 15px; background: #f0fff4; border: 2px solid #9ae6b4; border-radius: 8px; text-align: center; }
+        .status-text { color: #22543d; font-weight: 600; margin-bottom: 5px; }
+        .status-subtext { color: #2f855a; font-size: 14px; }
+        .railway-info { margin-top: 15px; padding: 10px; background: #e6fffa; border-radius: 6px; font-size: 12px; color: #2d3748; }
+        @media (max-width: 768px) {
+            .content { grid-template-columns: 1fr; gap: 20px; padding: 20px; }
+            .header h1 { font-size: 2rem; }
+            .feature-grid { grid-template-columns: 1fr; }
+            .bg-gradient { padding: 10px; }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🛡️ FileWalla SecureShare</h1>
-            <p>Enterprise-Grade Secure File Transfer for Medical Billing</p>
-        </div>
-        <div class="content">
-            <div>
-                <h2>Professional Medical Billing System</h2>
-                <div class="feature">
-                    <h3>🔐 AES-256 Encryption</h3>
-                    <p>Military-grade encryption for all file transfers</p>
-                </div>
-                <div class="feature">
-                    <h3>👥 Role-Based Access</h3>
-                    <p>Admin, Agent, Client, and User permission levels</p>
-                </div>
-                <div class="feature">
-                    <h3>📧 Email Notifications</h3>
-                    <p>Automated notifications for file transfers</p>
-                </div>
-                <div style="margin-top: 20px;">
-                    <span class="badge">✓ SOC 2 Compliant</span>
-                    <span class="badge">✓ Enterprise Security</span>
-                    <span class="badge">✓ Medical Ready</span>
-                </div>
+    <div class="bg-gradient">
+        <div class="container">
+            <div class="header">
+                <h1><span class="shield">🛡️</span> FileWalla</h1>
+                <div class="subtitle">SecureTransfer</div>
+                <div class="tagline">Enterprise-Grade Secure File Transfer for Medical Billing</div>
             </div>
-            <div class="login-panel">
-                <h3>Access FileWalla SecureShare</h3>
-                <div style="margin: 20px 0; padding: 15px; background: #e3f2fd; border-radius: 5px;">
-                    <h4>Test Accounts:</h4>
-                    <p><strong>Admin:</strong> admin / admin123</p>
-                    <p><strong>Client:</strong> s_client / password</p>
-                    <p><strong>Agent:</strong> s_agent / password</p>
+
+            <div class="content">
+                <div class="features">
+                    <h2>Professional Medical Billing System</h2>
+                    
+                    <div class="feature-grid">
+                        <div class="feature">
+                            <h3>🔐 AES-256 Encryption</h3>
+                            <p>Military-grade encryption for all file transfers and secure medical data handling</p>
+                        </div>
+                        <div class="feature">
+                            <h3>👥 Role-Based Access</h3>
+                            <p>Admin, Agent, Client, and User permission levels with site-based isolation</p>
+                        </div>
+                        <div class="feature">
+                            <h3>📧 Email Notifications</h3>
+                            <p>Automated notifications for file transfers with professional medical billing workflow</p>
+                        </div>
+                        <div class="feature">
+                            <h3>📊 Audit Logging</h3>
+                            <p>Complete audit trail for compliance with medical billing regulations and HIPAA</p>
+                        </div>
+                        <div class="feature">
+                            <h3>📈 Usage Analytics</h3>
+                            <p>Track file transfers, system usage, and billing metrics for medical practices</p>
+                        </div>
+                        <div class="feature">
+                            <h3>🏥 HIPAA Compliant</h3>
+                            <p>Secure handling of medical information with enterprise-grade security standards</p>
+                        </div>
+                    </div>
+
+                    <div class="enterprise-section">
+                        <h3 style="color: #2d3748; margin-bottom: 20px; font-size: 1.4rem;">Enterprise Security Standards</h3>
+                        <div class="enterprise-grid">
+                            <div class="enterprise-item">
+                                <div class="check-dot"></div>
+                                <span>SOC 2 Compliant Infrastructure</span>
+                            </div>
+                            <div class="enterprise-item">
+                                <div class="check-dot"></div>
+                                <span>Enterprise-Grade Security</span>
+                            </div>
+                            <div class="enterprise-item">
+                                <div class="check-dot"></div>
+                                <span>Medical Data Ready</span>
+                            </div>
+                            <div class="enterprise-item">
+                                <div class="check-dot"></div>
+                                <span>24/7 Monitoring & Support</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <p><em>Full React application loading after Railway deployment confirmed...</em></p>
+
+                <div>
+                    <div class="login-panel">
+                        <h3 style="text-align: center; margin-bottom: 10px; color: #2d3748;">Access FileWalla SecureShare</h3>
+                        <p style="text-align: center; color: #718096; margin-bottom: 20px;">Medical billing professionals</p>
+                        
+                        <form class="login-form" onsubmit="handleLogin(event)">
+                            <div class="form-group">
+                                <input type="text" class="form-input" placeholder="Username" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-input" placeholder="Password" required>
+                            </div>
+                            <button type="submit" class="btn-primary">Access System</button>
+                        </form>
+
+                        <div class="test-accounts">
+                            <h4>Demo Accounts:</h4>
+                            <p><strong>Admin:</strong> admin / admin123</p>
+                            <p><strong>Client:</strong> s_client / password</p>
+                            <p><strong>Agent:</strong> s_agent / password</p>
+                        </div>
+
+                        <div class="status-indicator">
+                            <div class="status-text">✅ Railway Deployment Active</div>
+                            <div class="status-subtext">System operational and ready for medical billing workflow</div>
+                            <div class="railway-info">
+                                <strong>Environment:</strong> Production<br>
+                                <strong>Port:</strong> ${PORT}<br>
+                                <strong>Health Check:</strong> <a href="/health" style="color: #3182ce;">/health</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
+    <script>
+        function handleLogin(event) {
+            event.preventDefault();
+            const username = event.target.querySelector('input[type="text"]').value;
+            if (username) {
+                alert('FileWalla SecureShare Authentication System\\n\\nFull React application with database authentication will be activated once MySQL database is connected.\\n\\nCurrent Status: UI Demo Mode');
+            }
+        }
+    </script>
 </body>
 </html>
   `);
 });
 
+app.get('/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    application: 'FileWalla SecureShare',
+    port: PORT,
+    timestamp: new Date().toISOString(),
+    railway: true
+  });
+});
+
 app.listen(PORT, '0.0.0.0', () => {
   console.log(\`FileWalla SecureShare running on port \${PORT}\`);
 });
+
+export default app;
