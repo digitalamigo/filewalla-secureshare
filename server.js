@@ -144,7 +144,7 @@ app.get('/', (req, res) => {
                             <div class="status-subtext">System operational and ready for medical billing workflow</div>
                             <div class="railway-info">
                                 <strong>Environment:</strong> Production<br>
-                                <strong>Port:</strong> ` + PORT + `<br>
+                                <strong>Port:</strong> ${PORT}<br>
                                 <strong>Health Check:</strong> <a href="/health" style="color: #3182ce;">/health</a>
                             </div>
                         </div>
@@ -179,7 +179,7 @@ app.get('/health', (req, res) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log('FileWalla SecureShare running on port ' + PORT);
+  console.log(\`FileWalla SecureShare running on port \${PORT}\`);
 });
 
 export default app;
