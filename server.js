@@ -1,71 +1,16 @@
 import express from 'express';
-import cors from 'cors';
-import helmet from 'helmet';
-import compression from 'compression';
-import mysql from 'mysql2/promise';
 
 const app = express();
-const PORT = parseInt(process.env.PORT || '3000', 10);
+const PORT = process.env.PORT || 3000;
 
-// Middleware
-app.use(helmet({ contentSecurityPolicy: false }));
-app.use(compression());
-app.use(cors());
-app.use(express.json({ limit: '50mb' }));
-
-// Database connection test
-async function testDatabase() {
-  if (!process.env.MYSQL_URL && !process.env.DATABASE_URL) {
-    return { connected: false, error: 'No database URL configured' };
-  }
-  
-  try {
-    const connection = await mysql.createConnection(
-      process.env.MYSQL_URL || process.env.DATABASE_URL
-    );
-    await connection.ping();
-    await connection.end();
-    return { connected: true, error: null };
-  } catch (error) {
-    return { connected: false, error: error.message };
-  }
-}
-
-// Health check
-app.get('/health', async (req, res) => {
-  const dbStatus = await testDatabase();
-  res.json({
-    status: 'ok',
-    database: dbStatus.connected ? 'connected' : 'disconnected',
-    dbError: dbStatus.error,
-    timestamp: new Date().toISOString(),
-    port: PORT
-  });
-});
-
-// API status
-app.get('/api/status', async (req, res) => {
-  const dbStatus = await testDatabase();
-  res.json({
-    application: 'FileWalla SecureShare',
-    status: 'operational',
-    database: dbStatus.connected ? 'connected' : 'disconnected',
-    environment: process.env.NODE_ENV || 'production',
-    version: '1.0.0',
-    railway: true
-  });
-});
-
-// FileWalla Professional Marketing Homepage
 app.get('/', (req, res) => {
-  res.send(\`
+  res.send(`
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FileWalla SecureShare - Enterprise File Transfer for Medical Billing</title>
-    <meta name="description" content="Enterprise-grade secure file transfer platform for medical billing. AES-256 encryption, role-based access, HIPAA compliant infrastructure.">
+    <title>FileWalla SecureShare - Enterprise File Transfer</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; }
@@ -198,8 +143,8 @@ app.get('/', (req, res) => {
                             <div class="status-text">✅ Railway Deployment Active</div>
                             <div class="status-subtext">System operational and ready for medical billing workflow</div>
                             <div class="railway-info">
-                                <strong>Environment:</strong> \${process.env.NODE_ENV || 'production'}<br>
-                                <strong>Port:</strong> \${PORT}<br>
+                                <strong>Environment:</strong> Production<br>
+                                <strong>Port:</strong> ` + PORT + `<br>
                                 <strong>Health Check:</strong> <a href="/health" style="color: #3182ce;">/health</a>
                             </div>
                         </div>
@@ -220,21 +165,21 @@ app.get('/', (req, res) => {
     </script>
 </body>
 </html>
-  \`);
+  `);
 });
 
-// Start server
-app.listen(PORT, '0.0.0.0', async () => {
-  console.log(\`🛡️ FileWalla SecureShare running on port \${PORT}\`);
-  console.log(\`📊 Health check: http://localhost:\${PORT}/health\`);
-  console.log(\`🌐 API status: http://localhost:\${PORT}/api/status\`);
-  
-  const dbStatus = await testDatabase();
-  if (dbStatus.connected) {
-    console.log('✅ MySQL database connected - Ready for medical billing workflow');
-  } else {
-    console.log('⚠️ Database connection needs configuration:', dbStatus.error);
-  }
+app.get('/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    application: 'FileWalla SecureShare',
+    port: PORT,
+    timestamp: new Date().toISOString(),
+    railway: true
+  });
+});
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log('FileWalla SecureShare running on port ' + PORT);
 });
 
 export default app;
